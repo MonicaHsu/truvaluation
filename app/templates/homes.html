@@ -1,0 +1,143 @@
+{% extends "layout/base.html" %}
+ 
+{% block head %}
+  <link href="{{ url_for('static', filename='css/world.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+
+<style>
+  #map_canvas {
+	margin-left: auto;
+    margin-right: auto;
+    width: 1000px;
+    height: 400px;
+  }
+</style>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+
+<script>function initialize() {
+  var map_canvas = document.getElementById('map_canvas');
+  var map_options = {
+    center: new google.maps.LatLng(37.765728, -122.451585),
+    zoom: 12,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  var map = new google.maps.Map(map_canvas, map_options)
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<body style="background-color:white;">
+<!--	
+	<script src="jquery.js"></script>
+			<script>
+
+			$(document).ready(function() {
+					$('table td:nth-child(7)').each(function() {
+						var Difference = $(this).text();
+
+						if ((Difference > 0) && (Difference < 250000)) {
+							$(this).css('backgroundColor', '#f76e6e'); 
+						}
+						else if((Difference > 250000) && (Difference < 500000)) {
+							$(this).css('backgroundColor', '#edb949'); 
+						}
+						else if((Difference > 500000) && (Difference < 750000)) {
+							$(this).css('backgroundColor', '#f2f381'); 
+						}
+						else {
+							$(this).css('backgroundColor', '#99faa0'); 
+						}
+					});
+					return false;
+
+			});
+
+			</script> -->
+
+<div id="map_canvas"></div>
+
+  <div id="wrap">
+    <div class="container">
+      <div class="slider-form">
+        <form id="form" class="form-inline" role="form">
+          <div> <b>Max list price:</b>
+            <input id="price" class="slider"
+                   type="range" min="50000" max="10000000" step="50000" value="{{settings['list_price']}}" name="list_price" />
+            <input id="price-textbox" class="textbox" type="text" value="{{settings['list_price']}}" maxlength="8" size="20" />
+          </div>
+
+          <div> <b>Min number of bedrooms:</b>
+            <input id="beds" class="slider" type="range" min="0" max="15" value="{{settings['beds']}}" name="beds" />
+            <input id="beds-textbox" class="textbox" type="text" value="{{settings['beds']}}" maxlength="2" />
+          </div>
+
+          <select id="order_by" name="order_by">
+            <option value="difference" {% if order_by == "difference" %} selected="selected" {% endif %}>
+              Difference
+            </option>
+
+			<option value="list_price" {% if order_by == "list_price" %} selected="selected" {% endif %}>
+              List Price
+            </option>
+
+            <option value="neighborhood" {% if order_by == "neighborhood" %} selected="selected" {% endif %}>
+              Neighborhood
+            </option>
+
+          </select>
+ 
+          <select id="sort" name="sort">
+           <option value="DESC" {% if sort == "DESC" %} selected="selected" {% endif %}>Descending</option> 
+           <option value="ASC" {% if sort == "ASC" %} selected="selected" {% endif %}>Ascending</option>
+          </select>
+          <button id="reset" type="submit" class="btn btn-default">Go!</button>       </form>
+      </div>
+
+
+ 
+      <div id="table">
+        <div class="table-responsive">
+          <table class="table table-bordered table-condensed table-striped">
+            <thead>
+              <th>Home</th>
+              <th>Beds</th>
+              <th>Baths</th>
+              <th>SQFT</th>
+              <th>List Price</th>
+              <th>Predicted Sale Price</th>
+              <th>Difference</th>
+              <th>Scores</th>
+            </thead>
+            <tbody>
+              {% for line in settings['data'] %}
+              <tr>
+                <td><b><u><a href={{line.home_url}}>{{line.home}}</a></b></u> ({{line.year_built}})<br>{{line.neighborhood}}</td>
+                <td>{{line.beds}}</td>
+                <td>{{line.baths}}</td>
+                <td>{{line.sqft}}</td>
+                <td>{{line.list_price  | format_currency}}</td>
+                <td>{{line.prediction  | format_currency}}</td>
+                <td><b><font color="black">{{line.difference | format_currency}}</font><b></td>
+	                <td>Transit Score: <font color='purple'>{{line.transit_score}}%</font><br>
+		Walk score: <font color='purple'>{{line.walk_score}}%</font><br>
+		Popularity Score: <font color='purple'>{{line.xouts}}%</font></td>
+	
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+ 
+{% block footer %}
+  {% include "include/footer.html" %}
+{% endblock %}
+ 
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/form-control.js') }}"></script>
+{% endblock %}

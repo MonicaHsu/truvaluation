@@ -1,0 +1,23 @@
+{
+  "arch": "x86_64", 
+  "build": "1", 
+  "build_number": 1, 
+  "files": [
+    "include/zconf.h", 
+    "include/zlib.h", 
+    "lib/libz.1.2.7.dylib", 
+    "lib/libz.1.dylib", 
+    "lib/libz.a", 
+    "lib/libz.dylib", 
+    "lib/pkgconfig/zlib.pc"
+  ], 
+  "link": {
+    "source": "/Users/monicatremont/anaconda/pkgs/zlib-1.2.7-1", 
+    "type": "hard-link"
+  }, 
+  "name": "zlib", 
+  "platform": "osx", 
+  "requires": [], 
+  "url": null, 
+  "version": "1.2.7"
+}

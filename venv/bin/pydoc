@@ -1,0 +1,5 @@
+#!/Users/monicatremont/Desktop/INSIGHT/monicafl/venv/bin/python
+
+import pydoc
+if __name__ == '__main__':
+    pydoc.cli()

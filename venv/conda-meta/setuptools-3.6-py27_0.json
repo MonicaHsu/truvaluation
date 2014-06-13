@@ -1,0 +1,25 @@
+{
+  "arch": "x86_64", 
+  "build": "py27_0", 
+  "build_number": 0, 
+  "depends": [
+    "python 2.7*"
+  ], 
+  "files": [
+    "bin/easy_install", 
+    "lib/python2.7/site-packages/setuptools-3.6-py2.7.egg", 
+    "lib/python2.7/site-packages/setuptools.pth"
+  ], 
+  "license": "PSF or ZPL", 
+  "link": {
+    "source": "/Users/monicatremont/anaconda/pkgs/setuptools-3.6-py27_0", 
+    "type": "hard-link"
+  }, 
+  "name": "setuptools", 
+  "platform": "osx", 
+  "requires": [
+    "python 2.7"
+  ], 
+  "url": "http://repo.continuum.io/pkgs/free/osx-64/setuptools-3.6-py27_0.tar.bz2", 
+  "version": "3.6"
+}

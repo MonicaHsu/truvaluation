@@ -1,0 +1,6 @@
+#!/Users/monicatremont/Desktop/INSIGHT/monicafl/venv/bin/python
+if __name__ == '__main__':
+    import sys
+    from pip import main
+
+    sys.exit(main())

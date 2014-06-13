@@ -1,0 +1,12 @@
+==> 2014-06-06 11:20:49 <==
+# cmd: /Users/monicatremont/anaconda/bin/conda create -p venv python pip
+==> 2014-06-06 11:20:51 <==
+# cmd: /Users/monicatremont/anaconda/bin/conda create -p venv python pip
++openssl-1.0.1g-0
++pip-1.5.6-py27_0
++python-2.7.7-0
++readline-6.2-2
++setuptools-3.6-py27_0
++sqlite-3.8.4.1-0
++tk-8.5.15-0
++zlib-1.2.7-1
