@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>Google Maps</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;" type="text/javascript"></script>
+  </head>
+  <body onunload="GUnload()">
+
+    <table border=1>
+      <tr>
+        <td>
+           <div id="map" style="width: 1550px; height: 1450px"></div>
+        </td>
+      </tr>
+    </table>
+
+
+    <script type="text/javascript">
+    //<![CDATA[
+
+    if (GBrowserIsCompatible()) {
+
+      var gmarkers = [];
+
+
+      function createMarker(point,name,alarm) {
+        var marker = new GMarker(point);
+        GEvent.addListener(marker, "click", function() {
+          marker.openInfoWindowHtml(alarm);
+        });
+
+        return marker;
+      }
+
+
+
+      function myclick(i) {
+        GEvent.trigger(gmarkers[i], "click");
+      }
+
+
+      var map = new GMap2(document.getElementById("map"));
+      map.addControl(new GLargeMapControl());
+      map.addControl(new GMapTypeControl());
+      map.setCenter(new GLatLng( 41.932797,21.483765), 10);
+
+
+
+      GDownloadUrl("alarms.xml", function(doc) {
+        var xmlDoc = GXml.parse(doc);
+        var markers = xmlDoc.documentElement.getElementsByTagName("marker");
+
+        for (var i = 0; i < markers.length; i++) {
+          // obtain the attribues of each marker
+          var lat = parseFloat(markers[i].getAttribute("lat"));
+          var lng = parseFloat(markers[i].getAttribute("lng"));
+          var point = new GLatLng(lat,lng);
+          var alarm = markers[i].getAttribute("alarm");
+          var label = markers[i].getAttribute("label");
+          // create the marker
+          var marker = createMarker(point,label,alarm);
+          map.addOverlay(marker);
+        }
+
+      });
+    }
+

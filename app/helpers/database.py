@@ -3,6 +3,7 @@ import sys
 import simplejson as json
 
 
+
 # Returns MySQL database connection
 def con_db(host, port, user, passwd, db):
     try:
@@ -22,6 +23,8 @@ def query_db(con, dict):
     year_built = dict["year_built"]
     zip_code = dict["zip_code"]
     list_price = dict["list_price"]
+    min_list_price = dict["min_list_price"]
+    max_list_price = dict["max_list_price"]
     beds = dict["beds"]
     baths = dict["baths"]
     sqft = dict["sqft"]
@@ -43,12 +46,12 @@ def query_db(con, dict):
 			beds, baths, sqft, 
 			ROUND((transit_score-58)/(100-58)*100), year_built, 
 			ROUND((walk_score-45)/(100-45)*100), 
-			ROUND(((1-(xouts/views))-.84)/(1-.84)*100)
+			ROUND(((1-(xouts/views))-.84)/(1-.84)*100), latitude, longitude
         FROM home_index
         JOIN home_url ON home_index.home = home_url.home
-		WHERE sqft > 0 AND beds >= {1} AND list_price <= {0}
-        ORDER BY {2} {3}
-        """.format(list_price, beds, order_by, sort)
+		WHERE sqft > 0 AND beds >= {2} AND list_price >= {0} AND list_price <= {1}
+        ORDER BY {3} {4}
+        """.format(min_list_price, max_list_price, beds, order_by, sort)
     )
 
     data = cur.fetchall()
@@ -68,6 +71,8 @@ def query_db(con, dict):
         index["year_built"] = home[10]
         index["walk_score"] = home[11]
         index["xouts"] = home[12]
+        index["latitude"] = home[13]
+        index["longitude"] = home[14]
 
         data_array.append(index)
 

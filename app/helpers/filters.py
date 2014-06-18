@@ -5,5 +5,3 @@
 def format_currency(value):
 	return "${:,}".format(int(round((value),-4)))
 
-
-

@@ -1,0 +1,98 @@
+
+{% extends "layout/base.html" %}
+
+{% block head %}
+  <link href="{{ url_for('static', filename='css/world.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+<html>
+<hr>
+<hr>
+<hr>
+<head>
+
+  
+<script>
+	function loopLookup (form) {
+	var max_price = form.max_price.value;
+	var min_price = form.min_price.value;
+	var beds = form.beds.value;
+	
+	window.open("http://localhost:5000/?max_list_price=" + max_price+"&min_price="+ min_price+"&beds="+beds+"&order_by=list_price&sort=DESC",'_self','width=1000,height=650,scrollbars=yes');
+	}
+</script>
+
+
+</head>
+<body>
+    <div id="wrap">
+    <div class="container">
+      <div class="slider-form">
+        <form id="form" class="form-inline" role="form">
+          <div> <b>Max price:</b>
+            <input id="max_price" class="slider"
+                   type="range" min="50000" max="5000000" step="50000" value="" name="max_list_price" style="width:100px;"/>
+            <input id="max_price-textbox" class="textbox" type="text" value="" maxlength="8" size="7" />
+          </div>
+
+          <div> <b>Min price:</b>
+            <input id="min_price" class="slider"
+                   type="range" min="50000" max="5000000" step="50000" value="" name="min_list_price" style="width:100px;"/>
+            <input id="min_price-textbox" class="textbox" type="text" value="" maxlength="8" size="7" />
+          </div>
+
+
+          <div> <b>Min Bedrooms:</b>
+            <input id="beds" class="slider" type="range" min="0" max="6" value="" name="beds" style="width:100px;"/>
+            <input id="beds-textbox" class="textbox" type="text" value="" maxlength="2" size="2" />
+          </div>
+		  <b>Order by:</b>
+          <select id="order_by" name="order_by">
+
+
+<input type="button" name="button"  value="Go!"
+  onclick="loopLookup(this.form)"> 
+
+</div>
+</div>
+</div>
+</form>
+</body>
+</html>
+
+{% endblock %}
+ 
+{% block footer %}
+  {% include "include/footer.html" %}
+{% endblock %}
+ 
+{% block scripts %}
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+
+  // Updates the slider when input text values are changed.
+  $("#min_price-textbox, #max_price-textbox, #beds-textbox").on("change", function() {
+    var min_price_Change = $("#min_price-textbox").val(),
+      max_price_Change = $("#max_price-textbox").val(),
+      beds_change = $("#beds-textbox").val();
+
+    $("#min_price").val(min_price_Change);
+    $("#max_price").val(max_price_Change);
+    $("#beds").val(beds_change);
+  });
+
+  // Submits form when slider is moved.
+  $("#min_price, #max_price, #beds, #order_by, #sort").on("change", function() {
+  });
+
+  // Reset form to default values.
+  $("#reset").on("click", function() {
+    $("#min_price").val(50000);
+    $("#max_price").val(1000000);
+    $("#beds").val(0);
+
+  });
+</script>
+{% endblock %}

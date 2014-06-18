@@ -1,0 +1,183 @@
+{% extends "layout/base.html" %}
+ 
+{% block head %}
+  <link href="{{ url_for('static', filename='css/world.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+
+<head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+  <title>Google Maps</title> 
+<div id="myTextDiv" style="color: white; position: absolute;">
+    <h1>Hello World</h1>
+</div>
+  <script src="http://maps.google.com/maps/api/js?sensor=false" 
+          type="text/javascript"></script>
+</head> 
+<body>
+  <div id="map" style="width: 100%; height: 66%;"></div>
+
+  <script type="text/javascript">
+    var locations = [
+    {% for line in settings['data'] %}
+
+      ['<font size=3><b><u><a href={{line.home_url}}>{{line.home}}, San Francisco, CA</a></b></u></font><br><img src="http://maps.googleapis.com/maps/api/streetview?size=100x75&location={{line.latitude}},{{line.longitude}}&heading=235"><br><i>{{line.neighborhood}} ({{line.year_built}})</i><br>{{line.beds}} bed, {{line.baths}} bath<br>{{line.sqft}} Sqft<br><br><b>List price: </b>{{line.list_price  | format_currency}}<br><b><font size=3>Predicted sale price: </b>{{line.prediction  | format_currency}}</font><br><br>Transit Score: {{line.transit_score}}%<br>Walk Score: {{line.walk_score}}%<br>', {{line.latitude}}, {{line.longitude}}, 4],
+      {% endfor %}
+
+    ];
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
+      center: new google.maps.LatLng(37.769913, -122.446926),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+	var myControl = document.getElementById('myTextDiv');
+	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(myControl);
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  </script>
+</body>
+
+<FONT FACE="modern">
+<body style="background-color:white;">
+
+  <div id="wrap">
+    <div class="container">
+      <div class="slider-form">
+        <form id="form" class="form-inline" role="form">
+          <div> <b>Max price:</b>
+            <input id="max_price" class="slider"
+                   type="range" min="50000" max="5000000" step="50000" value="{{settings['max_list_price']}}" name="max_list_price" />
+            <input id="max_price-textbox" class="textbox" type="text" value="{{settings['max_list_price']}}" maxlength="8" size="20" />
+          </div>
+
+          <div> <b>Min price:</b>
+            <input id="min_price" class="slider"
+                   type="range" min="50000" max="5000000" step="50000" value="{{settings['min_list_price']}}" name="min_list_price" />
+            <input id="min_price-textbox" class="textbox" type="text" value="{{settings['min_list_price']}}" maxlength="8" size="20" />
+          </div>
+
+
+          <div> <b>Min Bedrooms:</b>
+            <input id="beds" class="slider" type="range" min="0" max="6" value="{{settings['beds']}}" name="beds" />
+            <input id="beds-textbox" class="textbox" type="text" value="{{settings['beds']}}" maxlength="2" />
+          </div>
+		  <b>Order by:</b>
+          <select id="order_by" name="order_by">
+
+			<option value="list_price" {% if order_by == "list_price" %} selected="selected" {% endif %}>
+              List Price
+            </option>
+
+            <option value="difference" {% if order_by == "difference" %} selected="selected" {% endif %}>
+              Difference
+            </option>
+
+            <option value="neighborhood" {% if order_by == "neighborhood" %} selected="selected" {% endif %}>
+              Neighborhood
+            </option>
+
+          </select>
+ 
+          <select id="sort" name="sort">
+           <option value="DESC" {% if sort == "DESC" %} selected="selected" {% endif %}>Highest to Lowest</option> 
+           <option value="ASC" {% if sort == "ASC" %} selected="selected" {% endif %}>Lowest to Highest</option>
+          </select>
+          <button id="reset" type="submit" class="btn btn-default">Go!</button>       </form>
+      </div>
+
+
+ 
+      <div id="table">
+        <div class="table-responsive">
+          <table class="table table-bordered table-condensed table-striped">
+            <thead>
+              <th>Home</th>
+              <th>Beds/Baths</th>
+              <th>SQFT</th>
+              <th>List Price</th>
+              <th>Predicted Sale Price</th>
+              <th>Difference</th>
+              <th>Scores</th>
+            </thead>
+            <tbody>
+              {% for line in settings['data'] %}
+              <tr>
+                <td><b><u><a href={{line.home_url}}>{{line.home}}</a></b></u> ({{line.year_built}})<br>{{line.neighborhood}}</td>
+                <td>{{line.beds}}/{{line.baths}}</td>
+                <td>{{line.sqft}}</td>
+                <td>{{line.list_price  | format_currency}}</td>
+                <td>{{line.prediction  | format_currency}}</td>
+                <td><b><font color="black">{{line.difference | format_currency}}</font><b></td>
+	                <td>Transit Score: <font color='purple'>{{line.transit_score}}%</font><br>
+		Walk score: <font color='purple'>{{line.walk_score}}%</font><br></td>
+	
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</FONT>
+{% endblock %}
+ 
+{% block footer %}
+  {% include "include/footer.html" %}
+{% endblock %}
+ 
+{% block scripts %}
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+  // Passing data window; data is global.
+  var data = {{ settings['data'] | safe }};
+
+  // Updates the slider when input text values are changed.
+  $("#min_price-textbox, #max_price-textbox, #beds-textbox").on("change", function() {
+    var min_price_Change = $("#min_price-textbox").val(),
+      max_price_Change = $("#max_price-textbox").val(),
+      beds_change = $("#beds-textbox").val();
+
+    $("#min_price").val(min_price_Change);
+    $("#max_price").val(max_price_Change);
+    $("#beds").val(beds_change);
+  });
+
+  // Submits form when slider is moved.
+  $("#min_price, #max_price, #beds, #order_by, #sort").on("change", function() {
+    $("#form").submit();
+  });
+
+  // Reset form to default values.
+  $("#reset").on("click", function() {
+    $("#min_price").val(0);
+    $("#max_price").val(0);
+    $("#beds").val(0);
+    $("#order_by").val("difference");
+    $("#sort").val("DESC");
+
+    $("#form").submit();
+  });
+</script>
+{% endblock %}
