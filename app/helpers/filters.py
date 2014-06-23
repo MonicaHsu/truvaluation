@@ -5,3 +5,5 @@
 def format_currency(value):
 	return "${:,}".format(int(round((value),-4)))
 
+def format_percent(value):
+	return round((value),-2)

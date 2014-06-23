@@ -29,24 +29,22 @@ def query_db(con, dict):
     baths = dict["baths"]
     sqft = dict["sqft"]
     dom = dict["dom"]
-    parking = dict["parking"]
     prediction = dict["prediction"]
     bike_score = dict["bike_score"]
     transit_score = dict["transit_score"]
     walk_score = dict["walk_score"]
     order_by = dict["order_by"]
     sort = dict["sort"]
-
     # Query database
     cur = con.cursor()
     cur.execute(
         """
         SELECT DISTINCT home_index.home, list_price, 
-			prediction*sqft, prediction*sqft-list_price AS difference,url, neighborhood,
+			prediction*sqft as prediction_r, (100 + ROUND(100*(((prediction*sqft)-list_price)/(list_price)))) AS difference,url, neighborhood,
 			beds, baths, sqft, 
 			ROUND((transit_score-58)/(100-58)*100), year_built, 
 			ROUND((walk_score-45)/(100-45)*100), 
-			ROUND(((1-(xouts/views))-.84)/(1-.84)*100), latitude, longitude
+			ROUND(((1-(xouts/views))-.84)/(1-.84)*100), latitude, longitude, color
         FROM home_index
         JOIN home_url ON home_index.home = home_url.home
 		WHERE sqft > 0 AND beds >= {2} AND list_price >= {0} AND list_price <= {1}
@@ -73,6 +71,7 @@ def query_db(con, dict):
         index["xouts"] = home[12]
         index["latitude"] = home[13]
         index["longitude"] = home[14]
+        index["colorm"] = home[15]
 
         data_array.append(index)
 

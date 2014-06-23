@@ -12,7 +12,7 @@ from flask import request, url_for
 
 
 # ROUTING/VIEW FUNCTIONS
-@app.route('/', methods=['GET'])
+@app.route('/home', methods=['GET'])
 def index():
     # Create database connection
     con = con_db(host, port, user, passwd, db)
@@ -25,7 +25,7 @@ def index():
         "zip_code": request.args.get("zip_code", '0'),
         "list_price": request.args.get("list_price", '0'),
         "min_list_price": request.args.get("min_list_price", '0'),
-        "max_list_price": request.args.get("max_list_price", '0'),
+        "max_list_price": request.args.get("max_list_price", '2000000'),
         "beds": request.args.get("beds", '0'),
         "baths": request.args.get("baths", '0'),
         "sqft": request.args.get("sqft", '0'),
@@ -35,7 +35,7 @@ def index():
         "bike_score": request.args.get("bike_score", '0'),
         "transit_score": request.args.get("transit_score", '0'),
         "walk_score": request.args.get("walk_score", '0'),
-        "order_by": request.args.get("order_by", "difference"),
+        "order_by": request.args.get("order_by", "list_price"),
         "sort": request.args.get("sort", "ASC")
     }
 
@@ -47,7 +47,7 @@ def index():
 
     return render_template('homes.html', settings=var_dict)
 
-@app.route('/home')
+@app.route('/')
 def home():
     # Create database connection
     con = con_db(host, port, user, passwd, db)
@@ -60,7 +60,7 @@ def home():
         "zip_code": request.args.get("zip_code", '0'),
         "list_price": request.args.get("list_price", '0'),
         "min_list_price": request.args.get("min_list_price", '0'),
-        "max_list_price": request.args.get("max_list_price", '0'),
+        "max_list_price": request.args.get("max_list_price", '2000000'),
         "beds": request.args.get("beds", '0'),
         "baths": request.args.get("baths", '0'),
         "sqft": request.args.get("sqft", '0'),
@@ -81,6 +81,39 @@ def home():
     var_dict["data"] = data    # Renders home.html.
     return render_template('splash.html', settings=var_dict)
 
+@app.route('/test')
+def test():
+    # Create database connection
+    con = con_db(host, port, user, passwd, db)
+    # Add custom filter to jinja2 env
+    jinja2.filters.FILTERS['format_currency'] = format_currency
+    var_dict = {
+        "home": request.args.get("home"),
+        "year_built": request.args.get("year_built", '0'),
+        "zip_code": request.args.get("zip_code", '0'),
+        "list_price": request.args.get("list_price", '0'),
+        "min_list_price": request.args.get("min_list_price", '0'),
+        "max_list_price": request.args.get("max_list_price", '2000000'),
+        "beds": request.args.get("beds", '0'),
+        "baths": request.args.get("baths", '0'),
+        "sqft": request.args.get("sqft", '0'),
+        "dom": request.args.get("dom", '0'),
+        "parking": request.args.get("parking", '0'),
+        "prediction": request.args.get("prediction", '0'),
+        "bike_score": request.args.get("bike_score", '0'),
+        "transit_score": request.args.get("transit_score", '0'),
+        "walk_score": request.args.get("walk_score", '0'),
+        "order_by": request.args.get("order_by", "difference"),
+        "sort": request.args.get("sort", "ASC")
+    }
+
+    # Query the database
+    data = query_db(con, var_dict)
+
+    # Add data to dictionary
+    var_dict["data"] = data    # Renders home.html.
+    return render_template('test.html', settings=var_dict)
+	
 @app.route('/slides')
 def about():
     # Renders slides.html.

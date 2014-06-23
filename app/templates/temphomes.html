@@ -1,57 +1,43 @@
 {% extends "layout/base.html" %}
 
 {% block head %}
-<link href="{{ url_for('static', filename='css/world.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/world.css') }}" rel="stylesheet">
 
 {% endblock %}
 
 {% block content %}
-		
+<FONT face="Helvetica" size="4" color="black">
 
 <head> 
-	<body>
-		<FONT face="Helvetica" size="4" color="black">
-		
 <hr>
-<font size="4">
+<font size="3">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
   <title>Google Maps</title> 
-
-
-  <script src="http://maps.google.com/maps/api/js?sensor=false" 
-          type="text/javascript"></script>
-
-  <div id="map" style="width: 100%; height: 70%;"></div>
 <div id="myTextDiv" style="color: black; position: absolute;">
         <form id="form" class="form-inline" role="form">
-
-	<font size="5"> <b><p>
-          <div>&nbsp; &nbsp; Max list price:</b></font>
+	<font size="3.5"> <b><p>
+          <div>Max price:</b></font>
             <input id="max_price" class="slider" 
                    type="range" min="0" max="5000000" step="50000" value="{{settings['max_list_price']}}" name="max_list_price" style="width:100px;"/>
-            <input id="max_price-textbox" class="textbox" type="text" value="{{settings['max_list_price']}}" maxlength="8" size="9" />
+            <input id="max_price-textbox" class="textbox" type="text" value="{{settings['max_list_price']}}" maxlength="8" size="7" />
           </div>
 
-          <div> <font size="5"><b>&nbsp; &nbsp; Min list price:</b></font>
+          <div> <font size="3.5"><b>Min price:</b></font>
             <input id="min_price" class="slider"
                    type="range" min="0" max="5000000" step="50000" value="{{settings['min_list_price']}}" name="min_list_price" style="width:100px;"/>
-            <input id="min_price-textbox" class="textbox" type="text" value="{{settings['min_list_price']}}" maxlength="8" size="9" />
+            <input id="min_price-textbox" class="textbox" type="text" value="{{settings['min_list_price']}}" maxlength="8" size="7" />
           </div>
 
 
-          <div> <font size="5"><b>&nbsp; &nbsp; Min Bedrooms:</b></font>
+          <div> <font size="3.5"><b>Min Bedrooms:</b></font>
             <input id="beds" class="slider" type="range" min="0" max="6" value="{{settings['beds']}}" name="beds" style="width:100px;"/>
             <input id="beds-textbox" class="textbox" type="text" value="{{settings['beds']}}" maxlength="2" size="2" />
           </div>
-		  <font size="5"><b>&nbsp; &nbsp; Order by:</b></font>
+		  <font size="3.5"><b>Order by:</b></font>
           <select id="order_by" name="order_by">
 
 			<option value="list_price" {% if order_by == "list_price" %} selected="selected" {% endif %}>
               List Price
-            </option>
-
-            <option value="prediction_r" {% if order_by == "prediction_r" %} selected="selected" {% endif %}>
-              Predicted Sale Price
             </option>
 
             <option value="sqft" {% if order_by == "difference" %} selected="selected" {% endif %}>
@@ -72,24 +58,16 @@
            <option value="DESC" {% if sort == "DESC" %} selected="selected" {% endif %}>Descending</option> 
            <option value="ASC" {% if sort == "ASC" %} selected="selected" {% endif %}>Ascending</option>
           </select>
-          <button id="reset" type="submit" class="btn btn-default"><b><font size=5>Go!</b></font></button>  
+          <button id="reset" type="submit" class="btn btn-default"><b>Go!</b></button>  
 <p>  
 </form>
 
   </div>
-
-<div id="myTextDiv2" style="color: black; position: absolute;">
-	<div style="font-family:verdana;padding:4px;border-radius:10px;border:2px solid #000000;">
-
-<b><font size= 4>TruValuation Predictions:<br><br>
-	<img src="http://labs.google.com/ridefinder/images/mm_20_red.png"> = will sell below asking price<br>  
-	<img src="http://labs.google.com/ridefinder/images/mm_20_orange.png"> = will sell around asking price<br>  
-	<img src="http://labs.google.com/ridefinder/images/mm_20_green.png"> = will sell above asking price<br>  
-<b>
-	</font>
-	</div>
 </div>
-
+  <script src="http://maps.google.com/maps/api/js?sensor=false" 
+          type="text/javascript"></script>
+<body>
+  <div id="map" style="width: 100%; height: 70%;"></div>
 
   <script type="text/javascript">
 
@@ -97,7 +75,7 @@
     var locations = [
     {% for line in settings['data'] %}
 
-      ['<font size=3.5><b><u><a href={{line.home_url}} target="_blank">{{line.home}}, San Francisco, CA</a></b></u><br><img src="http://maps.googleapis.com/maps/api/streetview?size=100x75&location={{line.latitude}},{{line.longitude}}&heading=235"align="left"><br>{{line.neighborhood}} ({{line.year_built}})</i><br>{{line.beds}} bed, {{line.baths}} bath<br>{{line.sqft}} Sqft<br><br><b>List price: </b>{{line.list_price  | format_currency}}<br><b><font size=3.5>Predicted sale price: </b>{{line.prediction  | format_currency}} ({{line.difference}}% of list price)<br></font><font size=4><br><u><a href="test"><b>Why this valuation?</b></a></u></font><br>Transit Score: {{line.transit_score}}%<br>Walk Score: {{line.walk_score}}%<br>Popularity Score: {{line.xouts}}%<br></font>', {{line.latitude}}, {{line.longitude}},4,"{{line.colorm}}"],
+      ['<font size=3><b><u><a href={{line.home_url}} target="_blank">{{line.home}}, San Francisco, CA</a></b></u></font><br><img src="http://maps.googleapis.com/maps/api/streetview?size=100x75&location={{line.latitude}},{{line.longitude}}&heading=235"><br><i>{{line.neighborhood}} ({{line.year_built}})</i><br>{{line.beds}} bed, {{line.baths}} bath<br>{{line.sqft}} Sqft<br><br><b>List price: </b>{{line.list_price  | format_currency}}<br><b><font size=3>Predicted sale price: </b>{{line.prediction  | format_currency}} <font color=red>({{line.difference}}% of list price) </font></font><br><br>Transit Score: {{line.transit_score}}%<br>Walk Score: {{line.walk_score}}%<br>', {{line.latitude}}, {{line.longitude}},4,"{{line.colorm}}"],
       {% endfor %}
     ];
 
@@ -132,16 +110,14 @@
 
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 12,
-      center: new google.maps.LatLng(37.758818, -122.450357),
+      center: new google.maps.LatLng(37.769722, -122.452286),
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
 
 
 	var myControl = document.getElementById('myTextDiv');
-	map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(myControl);
+	map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(myControl);
 	
-	var myControl = document.getElementById('myTextDiv2');
-	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(myControl);
 
     var infowindow = new google.maps.InfoWindow();
 
@@ -166,13 +142,13 @@
     }
   </script>
 </body>
-<FONT face="Helvetica" size="2.5" color="black">
+<FONT face="Helvetica" size="2" color="black">
 
 <body style="background-color:white;">
  
       <div id="table">
         <div style="overflow:scroll;height:10000px;width:100%;overflow:auto" class="table-responsive">
-          <table border="1" class="table table-bordered table-condensed">
+          <table border="1" class="table table-bordered table-condensed table-striped">
             <thead>
 	<tr style="background-color: black;">
 	
@@ -183,7 +159,8 @@
 			  <th><font color="white">Baths</font></th>
               <th><font color="white">Sqft</font></th>
               <th><font color="white">List price</font></th>
-              <th><font color="white">Predicted sale price</font></th>
+              <th><font color="white">Predicted <br>sale price</font></th>
+              <th><font color="white">Prediction as % <br>of asking price</font></th>
               <th><font color="white">Scores</font></th></tr>
             </thead>
             <tbody>
@@ -196,10 +173,10 @@
 				<td>{{line.baths}}</td>
                 <td>{{line.sqft}}</td>
                 <td>{{line.list_price  | format_currency}}</td>
-                <td bgcolor={{line.colorm}}>{{line.prediction  | format_currency}} ({{line.difference}}% of list price)</td>
-<!--                <td><font color={{line.colorm}}>{{line.prediction  | format_currency}} ({{line.difference}}% of list price)</td></font>  -->
-	                <td><b>Transit:</b> {{line.transit_score}}%, 
-		<b>Walk: {{line.walk_score}}%, Popularity: {{line.xouts}}%<br></td>
+                <td>{{line.prediction  | format_currency}}</td>
+                <td><b><font color="black">{{line.difference}}%</font><b></td>
+	                <td>Transit: <font color='purple'>{{line.transit_score}}%</font>, 
+		Walk: <font color='purple'>{{line.walk_score}}%</font><br></td>
 	
               </tr>
               {% endfor %}
@@ -263,7 +240,16 @@
     $("#form").submit();
   });
 
+var severity = parseInt(markers[i].getAttribute("severity"));
+var severityIcon = new GIcon(G_DEFAULT_ICON);
+var color;
+if ({line.difference} < 0) color = "green";
+else if ({line.difference} >= 0) color = "blue";
+else if ({line.difference} == 3) color = "red";
+else color = "yellow";
+severityIcon.image = "http://www.google.com/intl/en_us/mapfiles/ms/micons/" + color + "-dot.png";
 
+markerOptions = { icon:severityIcon };
 
 </script>
 {% endblock %}
