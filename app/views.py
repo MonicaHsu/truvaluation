@@ -44,7 +44,14 @@ def index():
 
     # Add data to dictionary
     var_dict["data"] = data
-
+    for item in var_dict['data']:
+        item['xouts'] = int(item['xouts'])
+        item['longitude'] = float(item['longitude'])
+        item['latitude'] = float(item['latitude'])
+        item['prediction'] = float(item['prediction'])
+        item['walk_score'] = int(item['walk_score'])
+        item['transit_score'] = int(item['transit_score'])
+        item['difference'] = int(item['difference'])
     return render_template('homes.html', settings=var_dict)
 
 @app.route('/')

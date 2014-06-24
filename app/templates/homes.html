@@ -72,6 +72,7 @@
            <option value="DESC" {% if sort == "DESC" %} selected="selected" {% endif %}>Descending</option> 
            <option value="ASC" {% if sort == "ASC" %} selected="selected" {% endif %}>Ascending</option>
           </select>
+
           <button id="reset" type="submit" class="btn btn-default"><b><font size=5>Go!</b></font></button>  
 <p>  
 </form>
@@ -235,13 +236,11 @@
     $("#max_price").val(max_price_Change);
     $("#beds").val(beds_change);
   });
-
   // Updates the slider when input text values are changed.
   $("#min_price, #max_price, #beds").on("change", function() {
     var min_price_Change = $("#min_price").val(),
       max_price_Change = $("#max_price").val(),
       beds_change = $("#beds").val();
-
     $("#min_price-textbox").val(min_price_Change);
     $("#max_price-textbox").val(max_price_Change);
     $("#beds-textbox").val(beds_change);
@@ -255,7 +254,7 @@
   // Reset form to default values.
   $("#reset").on("click", function() {
     $("#min_price").val(0);
-    $("#max_price").val(0);
+   $("#max_price").val(0);
     $("#beds").val(0);
     $("#order_by").val("difference");
     $("#sort").val("DESC");
